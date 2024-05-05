@@ -1,6 +1,8 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 app.use(express.json());
+app.use(cors());
 const mongoose = require("mongoose");
 const Animal = require("./animal");
 
@@ -12,10 +14,12 @@ const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("Database Connected"));
 
-app.get("/", (req, res) => {});
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/index.html");
+});
 
 app.get("/animal", async (req, res) => {
-  const animals = await Animal.findAll({});
+  const animals = await Animal.find({});
   res.send(animals);
 });
 
