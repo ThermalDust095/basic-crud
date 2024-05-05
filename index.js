@@ -51,7 +51,7 @@ app.put("/animal/:id", async (req, res) => {
   );
 
   if (!animal) return res.status(404).send("Animal not found");
-  res.send(book);
+  res.send(animal);
 });
 
 app.delete("/animal/:id", async (req, res) => {

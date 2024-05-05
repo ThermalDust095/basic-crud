@@ -10,24 +10,24 @@
   <form id="createForm">
     <div>
       <label for="name">Name of Animal:</label>
-      <input type="text" id="name" name="name" required>
+      <input type="text" id="cranname" name="name" required>
     </div>
     <div>
       <label>Type of Animal:</label><br>
-      <input type="radio" id="domestic" name="type" value="Domestic" required>
+      <input type="radio" id="domestic" name="crantype" value="Domestic" required>
       <label for="domestic">Domestic</label><br>
-      <input type="radio" id="herbivorous" name="type" value="Herbivorous" required>
+      <input type="radio" id="herbivorous" name="crantype" value="Herbivorous" required>
       <label for="herbivorous">Herbivorous</label><br>
-      <input type="radio" id="carnivorous" name="type" value="Carnivorous" required>
+      <input type="radio" id="carnivorous" name="crantype" value="Carnivorous" required>
       <label for="carnivorous">Carnivorous</label><br>
-      <input type="radio" id="omnivorous" name="type" value="Omnivorous" required>
+      <input type="radio" id="omnivorous" name="crantype" value="Omnivorous" required>
       <label for="omnivorous">Omnivorous</label>
     </div>
     <div>
       <label for="legs">Number of Legs:</label>
-      <input type="number" id="legs" name="legs" required>
+      <input type="number" id="cranlegs" name="legs" required>
     </div>
-    <button type="submit">Create</button>
+    <button type="submit" onclick="createAnimals(event)">Create</button>
   </form>
 
   <hr>
@@ -46,13 +46,13 @@
     </div>
     <div>
       <label>Type of Animal:</label><br>
-      <input type="radio" id="updateDomestic" name="type" value="Domestic" required>
+      <input type="radio" id="updateDomestic" name="utype" value="Domestic" required>
       <label for="updateDomestic">Domestic</label><br>
-      <input type="radio" id="updateHerbivorous" name="type" value="Herbivorous" required>
+      <input type="radio" id="updateHerbivorous" name="utype" value="Herbivorous" required>
       <label for="updateHerbivorous">Herbivorous</label><br>
-      <input type="radio" id="updateCarnivorous" name="type" value="Carnivorous" required>
+      <input type="radio" id="updateCarnivorous" name="utype" value="Carnivorous" required>
       <label for="updateCarnivorous">Carnivorous</label><br>
-      <input type="radio" id="updateOmnivorous" name="type" value="Omnivorous" required>
+      <input type="radio" id="updateOmnivorous" name="utype" value="Omnivorous" required>
       <label for="updateOmnivorous">Omnivorous</label>
     </div>
     <div>
@@ -63,7 +63,7 @@
       <label for="updateId">ID:</label>
       <input type="text" id="updateId" name="id" required>
     </div>
-    <button type="submit">Update</button>
+    <button type="submit" onclick="updateAnimal(event)">Update</button>
   </form>
 
   <hr>
@@ -74,12 +74,53 @@
       <label for="deleteId">ID:</label>
       <input type="text" id="deleteId" name="id" required>
     </div>
-    <button type="submit">Delete</button>
+    <button type="submit" onclick="delAnimal(event)">Delete</button>
   </form>
 
   <script>
+
+    async function updateAnimal(event){
+        event.preventDefault()
+        const selectedType = document.querySelector('input[name="utype"]:checked');
+        await fetch(window.location + "animal"+ `/${document.querySelector("#updateId").value}`, {
+            method: "PUT",
+            body: JSON.stringify({
+                name: document.querySelector("#updateName").value,
+                type: selectedType.value,
+                legs: document.querySelector("#updateLegs").value
+            }),
+            headers: {
+            "Content-Type": "application/json"
+            }
+        })
+    }
+
+    async function createAnimals(event){
+        event.preventDefault();
+
+        const selectedType = document.querySelector('input[name="crantype"]:checked');
+        await fetch(window.location + "animal", {
+            method: "POST",
+            body: JSON.stringify({
+                name: document.querySelector("#cranname").value,
+                type: selectedType.value,
+                legs: document.querySelector("#cranlegs").value
+            }),
+            headers: {
+            "Content-Type": "application/json"
+            }
+        })
+    }
+
+    async function delAnimal(event){
+        event.preventDefault()
+        await fetch(window.location + "animal"+`/${document.querySelector("#deleteId").value}`, {
+            method: "DELETE"
+        })
+    }
+
     async function readAnimals() {
-      dummyData = await fetch( "http://127.0.0.1:3000/animal")
+      dummyData = await fetch(window.location + "animal")
       dummyData = await dummyData.json()
 
       console.log(dummyData)
