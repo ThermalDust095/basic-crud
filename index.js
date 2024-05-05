@@ -60,4 +60,4 @@ app.delete("/animal/:id", async (req, res) => {
   res.send(animal);
 });
 
-app.listen(3000, () => console.log("App running at Port 3000"));
+app.listen(3000, () => console.log("App running at http://localhost:3000/"));
